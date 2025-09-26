@@ -8,16 +8,12 @@ from bs4 import BeautifulSoup
 # que o requsts obteve da pagina e transformar em u m objeto python
 
 import re
-pagina = requests.get('https://moodle.ifrs.edu.br/course/index.php?categoryid=79&browse=courses&page=1')
-
-dados_pagina= BeautifulSoup(pagina.text,'html.parser')
 
 
+dados = requests.get('https://www.ev.org.br/areas-de-interesse/analise-de-dados',)
 
-todos_cursos=dados_pagina.findall('div',class_="coursename")
-#palavra 'class' no python é restrita por que ela foi utilizada
-#dentro da estrutura interna do código
 
-for div in todos_cursos:
-    texto=div.find('a',class_="coursename")
-    print(texto)
+soup= BeautifulSoup(dados.text,'html.parser')
+
+for link in soup.find_all('a'):
+    print(link.get('href'))
