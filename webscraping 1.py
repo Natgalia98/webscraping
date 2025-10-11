@@ -34,9 +34,7 @@ curso_informatica=BeautifulSoup(informatica_ifrs.text,'html.parser')
 #nova variavel que recebe, através do BeautifulSoup, o que procuram e oque requistaram anteriormente, além disso 
 # é analisado pelo html.parser
 
-#nome_curso_ifrs=curso_informatica.find_all('div',class_='coursename')
 
-'''
 #analise de dados bradesco
 for link in cursos_analise_dados_br.find_all('a'):
     url=link.get('href')
@@ -45,6 +43,8 @@ for link in cursos_analise_dados_br.find_all('a'):
         print(nome_curso)
         print("https://www.ev.org.br"+url)
 
+# print("2,'"+nome_curso+"'" +",'"+"https://www.ev.org.br"+url+"'")
+'''
 #inteligencia arifical bradesco
 for link in cursos_inteligencia_artificial_br.find_all('a'):
     url=link.get('href')
@@ -70,7 +70,7 @@ for link in curso_tecnologia_fgv.find_all('a'):
         print(nome_curso)
         print("https://educacao-executiva.fgv.br/"+url)
 
-'''#informatica ifrs
+#informatica ifrs
 for link in curso_informatica.find_all('a'):
     url=link.get('href')
     nome=link.get_text()
@@ -78,3 +78,4 @@ for link in curso_informatica.find_all('a'):
         print(nome)
         print(url)
 
+'''
