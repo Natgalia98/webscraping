@@ -10,32 +10,43 @@ from bs4 import BeautifulSoup
 import re
 
 #request e BeautifulSoup
+# variaveis que requisitam o que procuram no site
 analise_dados_bradesco = requests.get('https://www.ev.org.br/areas-de-interesse/analise-de-dados')
 
 inteligencia_artificial_bradesco=requests.get('https://www.ev.org.br/areas-de-interesse/inteligencia-artificial')
 
 programacao_bradesco=requests.get('https://www.ev.org.br/areas-de-interesse/programacao')
-#'-> variaveis que requisitam o que procuram no site 
+ 
 tecnologia_fgv=requests.get('https://educacao-executiva.fgv.br/cursos/gratuitos?sort_by=field_oferta_data_inicio_turma_value&items_per_page=10&field_curso_serie_target_id_entityreference_filter=All&area-conhec%5B%5D=571')
 
 informatica_ifrs=requests.get('https://moodle.ifrs.edu.br/course/index.php?categoryid=79&browse=courses&perpage=30&page=0')
 
-url_curso_bradesco='/cursos/'#condicional especificada para encontrar o que é necessário
+ciencia_computacao_usp=requests.get('https://eaulas.usp.br/portal/profession.action?profession=Ci%C3%AAncia+da+Computa%C3%A7%C3%A3o+e+Inform%C3%A1tica')
+
+programacao_iped=requests.get('https://www.iped.com.br/programacao-e-desenvolvimento')
+
+#condicional especificada para encontrar o que é necessário
+url_curso_bradesco='/cursos/'
 url_curso_fgv='online/curta-media-duracao-online/'
 url_curso_ifrs='/course/view.php?id='
+url_curso_usp='/course.action'
+url_curso_iped='cursos/'
 
-
-
+#nova variavel que recebe, através do BeautifulSoup, o que procuram e oque requistaram anteriormente, além disso 
+# é analisado pelo html.parser
 cursos_analise_dados_br= BeautifulSoup(analise_dados_bradesco.text,'html.parser')
 cursos_inteligencia_artificial_br= BeautifulSoup(inteligencia_artificial_bradesco.text,'html.parser')
 cursos_programacao_br=BeautifulSoup(programacao_bradesco.text,'html.parser')
 curso_tecnologia_fgv=BeautifulSoup(tecnologia_fgv.text,'html.parser')
 curso_informatica=BeautifulSoup(informatica_ifrs.text,'html.parser')
-#nova variavel que recebe, através do BeautifulSoup, o que procuram e oque requistaram anteriormente, além disso 
-# é analisado pelo html.parser
+curso_ciencia_computacao=BeautifulSoup(ciencia_computacao_usp.text,'html.parser')
+cursos_programacao_iped=BeautifulSoup(programacao_iped.text,'html.parser')
+
 
 
 #analise de dados bradesco
+print("\nCurso de Análise de Dados - Bradesco\n")
+
 for link in cursos_analise_dados_br.find_all('a'):
     url=link.get('href')
     nome_curso=link.get_text()
@@ -44,8 +55,10 @@ for link in cursos_analise_dados_br.find_all('a'):
         print("https://www.ev.org.br"+url)
 
 # print("2,'"+nome_curso+"'" +",'"+"https://www.ev.org.br"+url+"'")
-'''
+
 #inteligencia arifical bradesco
+print("\nCurso de Inteligência Artificial - Bradesco\n")
+
 for link in cursos_inteligencia_artificial_br.find_all('a'):
     url=link.get('href')
     nome_curso=link.get_text()
@@ -54,28 +67,51 @@ for link in cursos_inteligencia_artificial_br.find_all('a'):
         print("https://www.ev.org.br"+url)
     
 #programacao bradesco
+print("\nCurso de Programação - Bradesco\n")
+
 for link in cursos_programacao_br.find_all('a'):
     url=link.get('href')
     nome_curso=link.get_text()
-    if  url and url_curso_bradesco in url:
+    if  url and url_curso_bradesco in url:        
         print(nome_curso)
         print("https://www.ev.org.br"+url)
 
-
-#tecnologia fgv *dando erro*
+'''
+#tecnologia fgv *recebendo curso não relacionados*
 for link in curso_tecnologia_fgv.find_all('a'):
     url=link.get('href')
     nome_curso=link.get_text()
     if  url and url_curso_fgv in url:
         print(nome_curso)
         print("https://educacao-executiva.fgv.br/"+url)
-
+'''
 #informatica ifrs
+print("\nCurso de Informática - IFRS\n")
+
 for link in curso_informatica.find_all('a'):
     url=link.get('href')
-    nome=link.get_text()
-    if  url and url_curso_ifrs in url and nome:
-        print(nome)
+    nome_curso=link.get_text()
+    if  url and url_curso_ifrs in url and nome_curso:
+        print(nome_curso)
         print(url)
 
 '''
+#Ciencia da computação usp *duplicadando url*
+print("\nCurso de Ciencia da Computação - USP\n")
+
+for link in curso_ciencia_computacao.find_all('a'):
+    url=link.get('href')
+    nome=link.get_text()
+    if  url and url_curso_usp in url:
+        print(nome)
+        print("https://eaulas.usp.br/"+url)
+'''
+
+#programacao iped
+print("\nCurso de Programação - IPED\n")
+for link in programacao_iped.find_all('a'):
+    url=link.get('src')
+    nome_curso=link.get_text()
+    if  url and url_curso_iped in url :
+        print(nome_curso)
+        print(url)
