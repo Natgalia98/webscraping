@@ -20,9 +20,10 @@ tecnologia_fgv=requests.get('https://educacao-executiva.fgv.br/cursos/gratuitos?
 
 informatica_ifrs=requests.get('https://moodle.ifrs.edu.br/course/index.php?categoryid=79&browse=courses&perpage=30&page=0')
 
-curso_bradesco='/cursos/'#condicional especificada para encontrar o que é necessário
-curso_fgv='online/curta-media-duracao-online/'
-curso_ifrs='/course/info'
+url_curso_bradesco='/cursos/'#condicional especificada para encontrar o que é necessário
+url_curso_fgv='online/curta-media-duracao-online/'
+url_curso_ifrs='/course/view.php?id='
+
 
 
 cursos_analise_dados_br= BeautifulSoup(analise_dados_bradesco.text,'html.parser')
@@ -33,31 +34,47 @@ curso_informatica=BeautifulSoup(informatica_ifrs.text,'html.parser')
 #nova variavel que recebe, através do BeautifulSoup, o que procuram e oque requistaram anteriormente, além disso 
 # é analisado pelo html.parser
 
+#nome_curso_ifrs=curso_informatica.find_all('div',class_='coursename')
+
+'''
 #analise de dados bradesco
 for link in cursos_analise_dados_br.find_all('a'):
     url=link.get('href')
-    if  url and curso_bradesco in url:
-        print("https://www.ev.org.br"+url)
-   
-'''#inteligencia arifical bradesco
-for link in cursos_inteligencia_artificial_br.find_all('a'):
-    url=link.get('href')
-    if  url and curso in url:
+    nome_curso=link.get_text()
+    if  url and url_curso_bradesco in url:
+        print(nome_curso)
         print("https://www.ev.org.br"+url)
 
+#inteligencia arifical bradesco
+for link in cursos_inteligencia_artificial_br.find_all('a'):
+    url=link.get('href')
+    nome_curso=link.get_text()
+    if  url and url_curso_bradesco in url:
+        print(nome_curso)
+        print("https://www.ev.org.br"+url)
+    
 #programacao bradesco
 for link in cursos_programacao_br.find_all('a'):
     url=link.get('href')
-    if  url and curso in url:
+    nome_curso=link.get_text()
+    if  url and url_curso_bradesco in url:
+        print(nome_curso)
         print("https://www.ev.org.br"+url)
 
+
+#tecnologia fgv *dando erro*
 for link in curso_tecnologia_fgv.find_all('a'):
     url=link.get('href')
-    if  url and curso_fgv in url:
+    nome_curso=link.get_text()
+    if  url and url_curso_fgv in url:
+        print(nome_curso)
         print("https://educacao-executiva.fgv.br/"+url)
 
+'''#informatica ifrs
 for link in curso_informatica.find_all('a'):
     url=link.get('href')
-    if  url and curso_ifrs in url:
-        print(url)'''
+    nome=link.get_text()
+    if  url and url_curso_ifrs in url and nome:
+        print(nome)
+        print(url)
 
