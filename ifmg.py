@@ -24,5 +24,6 @@ for link in curso_tecnologia_ifmg.find_all('a'):
     url=link.get('href')
     nome_curso=link.get_text()
     if  url and url_curso_ifmg in url and nome_curso:
-        print(nome_curso)
-        print(url)
+        if(nome_curso !='Visualizar curso'): 
+            print(nome_curso)
+            print(url)
