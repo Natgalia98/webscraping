@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Buscador de Cursos FGV</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #2c3e50, #34495e);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            font-size: 1.1em;
+            opacity: 0.9;
+        }
+
+        .content {
+            padding: 30px;
+        }
+
+        .search-section {
+            background: #f8f9fa;
+            padding: 25px;
+            border-radius: 10px;
+            margin-bottom: 30px;
+            border-left: 4px solid #3498db;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #2c3e50;
+        }
+
+        input, select {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: border-color 0.3s;
+        }
+
+        input:focus, select:focus {
+            outline: none;
+            border-color: #3498db;
+        }
+
+        .btn {
+            background: linear-gradient(135deg, #3498db, #2980b9);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+            width: 100%;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(52, 152, 219, 0.4);
+        }
+
+        .btn:active {
+            transform: translateY(0);
+        }
+
+        .btn-secondary {
+            background: linear-gradient(135deg, #95a5a6, #7f8c8d);
+            margin-top: 10px;
+        }
+
+        .results-section {
+            display: none;
+        }
+
+        .results-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #ecf0f1;
+        }
+
+        .course-card {
+            background: white;
+            border: 1px solid #e0e0e0;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 15px;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .course-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+        }
+
+        .course-name {
+            font-size: 1.2em;
+            font-weight: 600;
+            color: #2c3e50;
+            margin-bottom: 10px;
+        }
+
+        .course-url a {
+            color: #3498db;
+            text-decoration: none;
+            word-break: break-all;
+        }
+
+        .course-url a:hover {
+            text-decoration: underline;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 40px;
+            display: none;
+        }
+
+        .spinner {
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #3498db;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 20px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .error {
+            background: #e74c3c;
+            color: white;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            display: none;
+        }
+
+        .success {
+            background: #27ae60;
+            color: white;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            display: none;
+        }
+
+        .quick-links {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+
+        .quick-link-btn {
+            background: #ecf0f1;
+            border: 2px solid #bdc3c7;
+            padding: 15px;
+            border-radius: 8px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-weight: 600;
+            color: #2c3e50;
+        }
+
+        .quick-link-btn:hover {
+            background: #3498db;
+            color: white;
+            border-color: #3498db;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                margin: 10px;
+            }
+            
+            .header h1 {
+                font-size: 2em;
+            }
+            
+            .content {
+                padding: 20px;
+            }
+            
+            .quick-links {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🎓 Buscador de Cursos</h1>
+            <p>Encontre cursos gratuitos da Fundação Getúlio Vargas</p>
+        </div>
+
+        <div class="content">
+            <!-- Links Rápidos -->
+            <div class="form-group">
+                <label>Busca Rápida:</label>
+                <div class="quick-links" id="quickLinks">
+                    <!-- Os botões serão preenchidos via JavaScript -->
+                </div>
+            </div>
+
+            <!-- Formulário de Busca -->
+            <form action="processa_dados.php" method="post">
+                <div class="form-group">
+                    <label for="areaPredefinida">Área de Conhecimento:</label>
+                    <select id="areaPredefinida">
+                        <option value="">Selecione uma área...</option>
+                        <option value="tecnologia">Tecnologia</option>
+                        <option value="gestao">Gestão e Negócios</option>
+                        <option value="direito">Direito</option>
+                        <option value="economia">Economia e Finanças</option>
+                        <option value="personalizada">URL Personalizada</option>
+                    </select>
+                </div>
+
+                <div class="form-group" id="urlPersonalizadaGroup" style="display: none;">
+                    <label for="url">URL Personalizada:</label>
+                    <input type="text" id="url" placeholder="https://educacao-executiva.fgv.br/...">
+                </div>
+
+                <div class="form-group">
+                    <label for="filtroUrl">Filtro de URL (opcional):</label>
+                    <input type="text" id="filtroUrl" placeholder="Ex: online/curta-media-duracao-online/">
+                </div>
+
+                <div class="form-group">
+                    <label for="areaConhecimento">Filtrar por Palavra-chave (opcional):</label>
+                    <input type="text" id="areaConhecimento" placeholder="Ex: tecnologia, gestão, etc...">
+                </div>
+
+                <button class="btn" onclick="buscarCursos()">🔍 Buscar Cursos</button>
+                <button class="btn btn-secondary" onclick="limparBusca()">🗑️ Limpar Busca</button>
+            </div>
+
+            <!-- Mensagens -->
+            <div class="error" id="errorMessage"></div>
+            <div class="success" id="successMessage"></div>
+
+            <!-- Loading -->
+            <div class="loading" id="loading">
+                <div class="spinner"></div>
+                <p>Buscando cursos... Isso pode levar alguns segundos.</p>
+            </div>
+
+            <!-- Resultados -->
+            <div class="results-section" id="resultsSection">
+                <div class="results-header">
+                    <h2>📚 Cursos Encontrados</h2>
+                    <span id="totalCursos">0 cursos</span>
+                </div>
+                <div id="cursosList"></div>
+            </div>
+        </div>
+    </div>
+
+    <script src="admteste.js">
+       
+    </script>
+</body>
+</html>
